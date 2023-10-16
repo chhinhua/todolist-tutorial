@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.event.spi.ResolveNaturalIdEvent;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -55,8 +56,9 @@ public class TodoController {
      * @return todo have been updated if successful or null if failed
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Todo> updateTodo(@PathVariable(value = "id") Long todoId,
-                                           @RequestBody Todo todo) {
+    public ResponseEntity<Todo> updateTodo(@Validated @RequestBody Todo todo,
+                                           @PathVariable(value = "id") Long todoId
+                                           ) {
         Todo updateTodo = todoService.updateTodo(todoId, todo);
 
         return ResponseEntity.ok(updateTodo);
