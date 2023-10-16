@@ -1,8 +1,10 @@
 package com.example.todolist.service;
 
 import com.example.todolist.entity.Todo;
+import com.example.todolist.exception.ResourceNotFoundException;
 import com.example.todolist.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.ResourceClosedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,12 +22,9 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public Todo getOne(Long id) {
-        Optional<Todo> todo = todoRepository.findById(id);
-
-        if (todo.isPresent()) {
-            return todo.get();
-        }
-        return null;
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Todo", "id", id));
+        return todo;
     }
 
     @Override
