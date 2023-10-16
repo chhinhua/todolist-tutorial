@@ -35,27 +35,22 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public Todo updateTodo(Long id, Todo todo) {
-        Optional<Todo> updateTodo = todoRepository.findById(id);
+        Todo updateTodo = todoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Todo", "id", id));
 
-        if (updateTodo.isPresent()) {
-            updateTodo.get().setName(todo.getName());
-            updateTodo.get().setDescription(todo.getDescription());
+        updateTodo.setName(todo.getName());
+        updateTodo.setDescription(todo.getDescription());
 
-            return todoRepository.save(updateTodo.get());
-        }
-
-        return null;
+        return todoRepository.save(updateTodo);
     }
 
     @Override
     public String deleteTodo(Long id) {
-        Optional<Todo> todo = todoRepository.findById(id);
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Todo", "id", id));
 
-        if (todo.isPresent()) {
-            todoRepository.delete(todo.get());
-            return "Todo deleted successfully";
-        }
+        todoRepository.delete(todo);
 
-        return "Todo deleted failed";
+        return "Todo deleted successfully";
     }
 }

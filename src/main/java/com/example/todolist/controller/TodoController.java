@@ -2,6 +2,7 @@ package com.example.todolist.controller;
 
 import com.example.todolist.entity.Todo;
 import com.example.todolist.service.TodoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.event.spi.ResolveNaturalIdEvent;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class TodoController {
      * @return todo
      */
     @PostMapping
-    public ResponseEntity<Todo> addTodo(@RequestBody Todo todo) {
+    public ResponseEntity<Todo> addTodo(@Valid @RequestBody Todo todo) {
         Todo saveTodo = todoService.addTodo(todo);
         return new ResponseEntity<>(saveTodo, HttpStatus.CREATED);
     }
@@ -56,7 +57,7 @@ public class TodoController {
      * @return todo have been updated if successful or null if failed
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Todo> updateTodo(@Validated @RequestBody Todo todo,
+    public ResponseEntity<Todo> updateTodo(@Valid @RequestBody Todo todo,
                                            @PathVariable(value = "id") Long todoId
                                            ) {
         Todo updateTodo = todoService.updateTodo(todoId, todo);
